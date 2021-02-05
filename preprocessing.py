@@ -17,20 +17,3 @@ print(df)
 
 
 
-#region Save your model
-
-dump(model, 'model.joblib')
-print("Model dumped!")
-
-#endregion
-
-#region Chargement du modèle
-model = load('model.joblib')
-
-#endregion
-
-#region Sauvegarde des données de la colonne depuis l'entrainement
-model_columns = list(x.columns)
-joblib.dump(model_columns, 'model_columns.pkl')
-print("Models columns dumped!")
-#endregion

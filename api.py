@@ -1,24 +1,29 @@
 # Dependencies
 from flask import Flask, request, jsonify
+import requests
 import sklearn.externals as extjoblib
 import joblib
 import traceback
 import pandas as pd
 import numpy as np
 
+
 # Your API definition
 app = Flask(__name__)
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if lr:
+    if modelsvc:
         try:
-            json_ = request.json
-            print(json_)
-            query = pd.get_dummies(pd.DataFrame(json_))
-            query = query.reindex(columns=model_columns, fill_value=0)
+            url = "http://0.0.0.0:1234/"
 
-            prediction = list(lr.predict(query))
+            data = requests.get(url + 'datas').json()
+            data2 = data['Data']
+            df = pd.DataFrame(data2)
+            df = df['compte_rendu']
+            print(df)
+            model =modelsvc.fit(df)
+            prediction = list(modelsvc.predict(model))
 
             return jsonify({'prediction': str(prediction)})
 
@@ -35,7 +40,7 @@ if __name__ == '__main__':
     except:
         port = 12345 # If you don't provide any port the port will be set to 12345
 
-    lr = joblib.load("modelsvc.pkl") # Load "model.pkl"
+    modelsvc = joblib.load("modelsvc.pkl") # Load "model.pkl"
     print ('Model loaded')
     model_columns = joblib.load("model_columns.pkl") # Load "model_columns.pkl"
     print ('Model columns loaded')
